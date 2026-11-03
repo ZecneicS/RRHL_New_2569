@@ -26,7 +26,7 @@ class SsoProfile extends BaseProfile
             'gravatarEmailLength'  => ['gravatar_email', 'string', 'max' => 255],
             // 'locationLength'       => ['location', 'string', 'max' => 255],
             // 'websiteLength'        => ['website', 'string', 'max' => 255],
-            // [['department_id'], 'string','max'=>10],
+            [['department_id'], 'string', 'max' => 20],
             // [['position','level','position_type'], 'string', 'max' => 150],
             [['prefix'], 'string', 'max' => 50],
             [['firstname','lastname'], 'string', 'max' => 255],
@@ -44,17 +44,18 @@ class SsoProfile extends BaseProfile
     }
 
     public function getOffice(){
-        return $this->hasOne(Office::className(),['office_id'=>'department_id']);
+        // department_id เก็บค่า office.id (ตรงกับ NewsController::getOffice, DepartmentController::getMember)
+        return $this->hasOne(Office::className(),['id'=>'department_id']);
     }
 
     public function getOfficeName(){
-        return $this->canGetProperty('office') ? $this->office->office_name : null;
+        return $this->office ? $this->office->office_name : null;
     }
 
     //Dune
     public function getOfficeRegion(){
-        return $this->canGetProperty('office') ? $this->office->office_region : null;
-    }  
+        return $this->office ? $this->office->office_region : null;
+    }
 
     public function attributeLabels()
     {
